@@ -1,0 +1,102 @@
+### A simple get request to the test endpoint. No need for login
+GET {{url}}/auth/test/
+
+### Populate the database with some data
+GET {{url}}/rackets/populate/
+
+### Create a new user - this one will only get a USER role by default
+POST {{url}}/auth/register/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+
+###
+POST {{url}}/auth/login/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
+###
+GET {{url}}/protected/user_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+###
+GET {{url}}/protected/admin_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Add admin role to user
+POST {{url}}/auth/user/addrole/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+    "role": "admin"
+}
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+###
+GET {{url}}/rackets
+
+###
+GET {{url}}/rackets/3
+
+###
+POST {{url}}/rackets
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "brand" : "Wilson",
+  "model" : "Shifte"
+}
+
+###
+PUT {{url}}/rackets/3
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "brand": "Babolat",
+  "model": "Pure Aero RAFA"
+}
+
+###
+DELETE {{url}}/rackets/1
+Authorization: Bearer {{jwt_token}}
+
+// Room API
+###
+GET {{url}}/racketdetails
+Authorization: Bearer {{jwt_token}}
+
+###
+GET {{url}}/racketdetails/11
+Authorization: Bearer {{jwt_token}}
+
+###
+POST {{url}}/racketdetails/racket/3
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "weight": 320,
+  "stringPattern": "16X19",
+  "gripSize": "4",
+  "price":  200,
+  "size" : "SENIOR"
+}
